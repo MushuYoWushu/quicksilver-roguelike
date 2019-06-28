@@ -1,3 +1,31 @@
+# Hello QuickSilver
+
+This is an experiment to get quicksilver up and running with a game on the web.
+
+## Quick Build (Offline version)
+Run/play on local computer - `cargo run --release`
+Run/play web version on local computer - `cargo web start --auto-reload` then go to `http://localhost:8000`
+
+## Quick Deploy (Online version)
+Below is the informal essential process I followed to get this repo up and running at [this webpage](https://mushuyowushu.github.io/quicksilver-roguelike/).
+This is provided in the hope that it will be useful to people without a programming background.
+
+1. **Fork** the repo [here](https://github.com/tomassedovic/quicksilver-roguelike) to your GitHub
+2. **Clone (download)** to an IDE (code editor) of your choice. 
+3. **Run** `cargo web deploy` (This command will work on a command line or through your IDE)
+4. **Checkout (change)** to your `gh-pages` branch somehow. (terminal `git checkout -b gh-pages`)
+5. **`pull`** to check that you're up to date with the `gh-pages` branch (terminal `git pull origin gh-pages`)
+6. **Run** `cargo web deploy` to build the web files
+7. **Copy** everything inside `target\deploy` into the project root directory somehow (this should be just outside of target)
+8. **Add** the files to git (terminal `git add .`)
+9. **Commit** (terminal `git commit -m "your message here"`)
+10. **Push** (terminal `git push -u origin gh-pages`)
+11. **Go** to `https://{github user name}.github.io/{repository name}/`
+12. **Leave** this repo a star so I know it helped you out!
+
+Below is the original README file that comes with the repo. This contains a more formal programmer directed version of the
+instructions I wrote above and is included for completeness.
+
 # Writing a Rust Roguelike for Desktop and the Web
 
 This is a template for a Roguelike written in [Rust][rust]. You can
