@@ -29,7 +29,18 @@ fn generate_map(size: Vector) -> Vec<Tile> {
     }
     map
 }
+/*
+#[derive(Clone, Debug, PartialEq)]
+struct Music {
+    music: Asset<Sound>,
+    length: f32,
+    active: bool,
+}
 
+impl MusicPlayer for Music {
+
+}
+*/
 #[derive(Clone, Debug, PartialEq)]
 struct Entity {
     pos: Vector,
@@ -83,6 +94,8 @@ struct Game {
     player_id: usize,
     tileset: Asset<HashMap<char, Image>>,
     tile_size_px: Vector,
+    bg_music: Asset<Sound>,
+    controls: Asset<Image>,
 }
 
 impl State for Game {
@@ -91,6 +104,7 @@ impl State for Game {
         // The Mononoki font: https://madmalik.github.io/mononoki/
         // License: SIL Open Font License 1.1
         let font_mononoki = "mononoki-Regular.ttf";
+        let loop_music = "Miami-Viceroy.mp3";
 
         let title = Asset::new(Font::load(font_mononoki).and_then(|font| {
             font.render("Quicksilver Roguelike", &FontStyle::new(72.0, Color::BLACK))
@@ -116,6 +130,15 @@ impl State for Game {
                 &FontStyle::new(20.0, Color::BLACK),
             )
         }));
+
+        let controls = Asset::new(Font::load(font_mononoki).and_then(move |font| {
+            font.render(
+                "Controls:\n[Arrow Keys] Movement\n[Q] Music\n",
+                &FontStyle::new(20.0, Color::BLACK),
+            )
+        }));
+
+        let bg_music = Asset::new( Sound::load(loop_music));
 
         let map_size = Vector::new(20, 15);
         let map = generate_map(map_size);
@@ -158,6 +181,8 @@ impl State for Game {
             player_id,
             tileset,
             tile_size_px,
+            bg_music,
+            controls,
         })
     }
 
@@ -177,6 +202,9 @@ impl State for Game {
         }
         if window.keyboard()[Key::Down] == Pressed {
             player.pos.y += 1.0;
+        }
+        if window.keyboard()[Key::Q] == Pressed {
+            self.bg_music.execute(|music| {music.play()});
         }
         if window.keyboard()[Key::Escape].is_down() {
             window.close();
@@ -274,6 +302,8 @@ impl State for Game {
             Col(Color::RED),
         );
 
+        /*
+        // Draw Inventory Text Helper
         self.inventory.execute(|image| {
             window.draw(
                 &image
@@ -282,8 +312,18 @@ impl State for Game {
                 Img(&image),
             );
             Ok(())
-        })?;
+        })?;*/
 
+        // Draw Command Text Helper
+        self.controls.execute(|image| {
+            window.draw(
+                &image
+                    .area()
+                    .translate(health_bar_pos_px + Vector::new(0, tile_size_px.y)),
+                Img(&image),
+            );
+            Ok(())
+        })?;
         Ok(())
     }
 }
