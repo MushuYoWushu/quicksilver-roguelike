@@ -1,4 +1,8 @@
+extern crate ncollide2d;
+
 use quicksilver::prelude::*;
+use ncollide2d::shape::*;
+use nalgebra::Vector2;
 
 use std::collections::HashMap;
 
@@ -7,6 +11,7 @@ struct Tile {
     pos: Vector,
     glyph: char,
     color: Color,
+    collider: Cuboid<f32>,
 }
 
 fn generate_map(size: Vector) -> Vec<Tile> {
@@ -19,10 +24,12 @@ fn generate_map(size: Vector) -> Vec<Tile> {
                 pos: Vector::new(x as f32, y as f32),
                 glyph: '.',
                 color: Color::BLACK,
+                collider: Cuboid::new(Vector2::new(0.0, 0.0))
             };
 
             if x == 0 || x == width - 1 || y == 0 || y == height - 1 {
                 tile.glyph = '#';
+                tile.collider = Cuboid::new(Vector2::new(tile.pos.x, tile.pos.y));
             };
             map.push(tile);
         }
@@ -104,10 +111,10 @@ impl State for Game {
         // The Mononoki font: https://madmalik.github.io/mononoki/
         // License: SIL Open Font License 1.1
         let font_mononoki = "mononoki-Regular.ttf";
-        let loop_music = "Miami-Viceroy.mp3";
+        let loop_music = "vgm21.wav";
 
         let title = Asset::new(Font::load(font_mononoki).and_then(|font| {
-            font.render("Quicksilver Roguelike", &FontStyle::new(72.0, Color::BLACK))
+            font.render("Quicksilver Tech Demo", &FontStyle::new(72.0, Color::BLACK))
         }));
 
         let mononoki_font_info = Asset::new(Font::load(font_mononoki).and_then(|font| {
@@ -117,7 +124,7 @@ impl State for Game {
             )
         }));
 
-        let square_font_info = Asset::new(Font::load(font_mononoki).and_then(move |font| {
+        let square_font_info = Asset::new(Font::load(font_mononoki).and_then( |font| {
             font.render(
                 "Square font by Wouter Van Oortmerssen, terms: CC BY 3.0",
                 &FontStyle::new(20.0, Color::BLACK),
@@ -204,7 +211,7 @@ impl State for Game {
             player.pos.y += 1.0;
         }
         if window.keyboard()[Key::Q] == Pressed {
-            self.bg_music.execute(|music| {music.play()});
+            self.bg_music.execute(|music| {music.play()})?;
         }
         if window.keyboard()[Key::Escape].is_down() {
             window.close();

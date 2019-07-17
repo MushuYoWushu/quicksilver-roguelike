@@ -1,5 +1,5 @@
 [package]
-name = "Quicksilver-Tech-Demo"
+name = "quicksilver_tech_demo"
 version = "0.1.0"
 authors = ["Tomas Sedovic <tomas@sedovic.cz>", "MushuYoWushu"]
 edition = "2018"
@@ -8,3 +8,5 @@ edition = "2018"
 # More features: "collisions", "complex_shapes", "immi_ui", "sounds", "gamepads"
 # Here everything is enabled because more power = more better
 quicksilver = { version = "0.3.10", default-features = true}
+nalgebra = "0.18.0"
+ncollide2d = "0.19.2"
