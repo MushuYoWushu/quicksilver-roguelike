@@ -140,7 +140,7 @@ impl State for Game {
 
         let controls = Asset::new(Font::load(font_mononoki).and_then(move |font| {
             font.render(
-                "Controls:\n[Arrow Keys] Movement\n[Q] Music\n",
+                "Controls:\n[Arrow Keys] Movement\n[Q] Music (vgm21)\n",
                 &FontStyle::new(20.0, Color::BLACK),
             )
         }));
